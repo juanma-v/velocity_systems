@@ -1,0 +1,278 @@
+--
+-- ER/Studio 8.0 SQL Code Generation
+-- Company :      Monzon
+-- Project :      Velocity_P4.dm1
+-- Author :       Luis
+--
+-- Date Created : Friday, April 24, 2015 18:50:05
+-- Target DBMS : PostgreSQL 8.0
+--
+
+-- 
+-- TABLE: "ASIGNACION_VIAJE" 
+--
+
+CREATE TABLE "ASIGNACION_VIAJE"(
+    "VIAJE"      integer       NOT NULL,
+    "ES_INICIO"  varchar(2)    NOT NULL,
+    "PARADA"     integer       NOT NULL,
+    CONSTRAINT "PK9" PRIMARY KEY ("VIAJE", "PARADA")
+)
+;
+
+
+
+-- 
+-- TABLE: "BUS" 
+--
+
+CREATE TABLE "BUS"(
+    "BUS"       integer    NOT NULL,
+    "TIPO_BUS"  integer    NOT NULL,
+    CONSTRAINT "PK1" PRIMARY KEY ("BUS")
+)
+;
+
+
+
+-- 
+-- TABLE: "CLIENTE" 
+--
+
+CREATE TABLE "CLIENTE"(
+    "CLIENTE"           integer        NOT NULL,
+    "NOMBRE"            varchar(10)    NOT NULL,
+    "FECHA_NACIMIENTO"  date           NOT NULL,
+    CONSTRAINT "PK4" PRIMARY KEY ("CLIENTE")
+)
+;
+
+
+
+-- 
+-- TABLE: "FACTURA" 
+--
+
+CREATE TABLE "FACTURA"(
+    "RESERVACION"  integer    NOT NULL,
+    "TOTAL"        integer,
+    "CLIENTE"      integer    NOT NULL,
+    "TICKET"       integer    NOT NULL,
+    CONSTRAINT "PK7" PRIMARY KEY ("RESERVACION", "CLIENTE", "TICKET")
+)
+;
+
+
+
+-- 
+-- TABLE: "PARADA_RUTA" 
+--
+
+CREATE TABLE "PARADA_RUTA"(
+    "RUTA"         char(10)    NOT NULL,
+    "CORRELATIVO"  integer     NOT NULL,
+    "PARADA"       integer     NOT NULL,
+    CONSTRAINT "PK13" PRIMARY KEY ("RUTA", "PARADA")
+)
+;
+
+
+
+-- 
+-- TABLE: "PARADA1" 
+--
+
+CREATE TABLE "PARADA1"(
+    "PARADA"     integer        NOT NULL,
+    "NOMBRE"     varchar(25)    NOT NULL,
+    "UBICACION"  varchar(25)    NOT NULL,
+    CONSTRAINT "PK12" PRIMARY KEY ("PARADA")
+)
+;
+
+
+
+-- 
+-- TABLE: "RESERVACION" 
+--
+
+CREATE TABLE "RESERVACION"(
+    "RESERVACION"        integer    NOT NULL,
+    "FECHA_RESERVACION"  date,
+    "CLIENTE"            integer    NOT NULL,
+    "TICKET"             integer    NOT NULL,
+    CONSTRAINT "PK15" PRIMARY KEY ("RESERVACION", "CLIENTE", "TICKET")
+)
+;
+
+
+
+-- 
+-- TABLE: "RUTA" 
+--
+
+CREATE TABLE "RUTA"(
+    "RUTA"     char(10)       NOT NULL,
+    "PARADAS"  integer,
+    "NOMBRE"   varchar(10),
+    CONSTRAINT "PK5" PRIMARY KEY ("RUTA")
+)
+;
+
+
+
+-- 
+-- TABLE: "RUTA_BUS" 
+--
+
+CREATE TABLE "RUTA_BUS"(
+    "BUS"   integer     NOT NULL,
+    "RUTA"  char(10)    NOT NULL,
+    CONSTRAINT "PK10" PRIMARY KEY ("BUS", "RUTA")
+)
+;
+
+
+
+-- 
+-- TABLE: "TICKET" 
+--
+
+CREATE TABLE "TICKET"(
+    "TICKET"        integer        NOT NULL,
+    "VIAJE"         integer        NOT NULL,
+    "ESTADO"        varchar(25)    NOT NULL,
+    "HORA_SALIDA"   varchar(5)     NOT NULL,
+    "HORA_LLEGADA"  varchar(5)     NOT NULL,
+    CONSTRAINT "PK11" PRIMARY KEY ("TICKET")
+)
+;
+
+
+
+-- 
+-- TABLE: "TIPO_BUS" 
+--
+
+CREATE TABLE "TIPO_BUS"(
+    "TIPO_BUS"     integer        NOT NULL,
+    "CAPACIDAD"    integer        NOT NULL,
+    "ASIENTOS"     integer        NOT NULL,
+    "DESCRIPCION"  varchar(50),
+    "NOMBRE"       varchar(10)    NOT NULL,
+    CONSTRAINT "PK2" PRIMARY KEY ("TIPO_BUS")
+)
+;
+
+
+
+-- 
+-- TABLE: "VIAJE" 
+--
+
+CREATE TABLE "VIAJE"(
+    "VIAJE"         integer       NOT NULL,
+    "HORA_SALIDA"   varchar(5),
+    "HORA_LLEGADA"  varchar(5),
+    "PRECIO"        integer       NOT NULL,
+    CONSTRAINT "PK8" PRIMARY KEY ("VIAJE")
+)
+;
+
+
+
+-- 
+-- TABLE: "ASIGNACION_VIAJE" 
+--
+
+ALTER TABLE "ASIGNACION_VIAJE" ADD CONSTRAINT "RefVIAJE15" 
+    FOREIGN KEY ("VIAJE")
+    REFERENCES "VIAJE"("VIAJE")
+;
+
+ALTER TABLE "ASIGNACION_VIAJE" ADD CONSTRAINT "RefPARADA131" 
+    FOREIGN KEY ("PARADA")
+    REFERENCES "PARADA1"("PARADA")
+;
+
+
+-- 
+-- TABLE: "BUS" 
+--
+
+ALTER TABLE "BUS" ADD CONSTRAINT "RefTIPO_BUS3" 
+    FOREIGN KEY ("TIPO_BUS")
+    REFERENCES "TIPO_BUS"("TIPO_BUS")
+;
+
+
+-- 
+-- TABLE: "FACTURA" 
+--
+
+ALTER TABLE "FACTURA" ADD CONSTRAINT "RefRESERVACION29" 
+    FOREIGN KEY ("RESERVACION", "CLIENTE", "TICKET")
+    REFERENCES "RESERVACION"("RESERVACION", "CLIENTE", "TICKET")
+;
+
+ALTER TABLE "FACTURA" ADD CONSTRAINT "RefCLIENTE30" 
+    FOREIGN KEY ("CLIENTE")
+    REFERENCES "CLIENTE"("CLIENTE")
+;
+
+
+-- 
+-- TABLE: "PARADA_RUTA" 
+--
+
+ALTER TABLE "PARADA_RUTA" ADD CONSTRAINT "RefRUTA23" 
+    FOREIGN KEY ("RUTA")
+    REFERENCES "RUTA"("RUTA")
+;
+
+ALTER TABLE "PARADA_RUTA" ADD CONSTRAINT "RefPARADA124" 
+    FOREIGN KEY ("PARADA")
+    REFERENCES "PARADA1"("PARADA")
+;
+
+
+-- 
+-- TABLE: "RESERVACION" 
+--
+
+ALTER TABLE "RESERVACION" ADD CONSTRAINT "RefCLIENTE26" 
+    FOREIGN KEY ("CLIENTE")
+    REFERENCES "CLIENTE"("CLIENTE")
+;
+
+ALTER TABLE "RESERVACION" ADD CONSTRAINT "RefTICKET28" 
+    FOREIGN KEY ("TICKET")
+    REFERENCES "TICKET"("TICKET")
+;
+
+
+-- 
+-- TABLE: "RUTA_BUS" 
+--
+
+ALTER TABLE "RUTA_BUS" ADD CONSTRAINT "RefBUS18" 
+    FOREIGN KEY ("BUS")
+    REFERENCES "BUS"("BUS")
+;
+
+ALTER TABLE "RUTA_BUS" ADD CONSTRAINT "RefRUTA19" 
+    FOREIGN KEY ("RUTA")
+    REFERENCES "RUTA"("RUTA")
+;
+
+
+-- 
+-- TABLE: "TICKET" 
+--
+
+ALTER TABLE "TICKET" ADD CONSTRAINT "RefVIAJE20" 
+    FOREIGN KEY ("VIAJE")
+    REFERENCES "VIAJE"("VIAJE")
+;
+
+
