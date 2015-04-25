@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  h1 "Bienvenido a Velocity Systems"
+  p"Logueate"
+  h2"User"
+  input(type='text', name='txt_usuario', id='txt_usuario')
+  h2"Password"
+  input(type='text', name='txt_pass', id='txt_pass')
+  input(type="button", value="LogIn", id='btn_login',onClick="loguear()")
